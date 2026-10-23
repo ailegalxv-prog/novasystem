@@ -30,7 +30,7 @@ jobs:
           for f in index.html style.css script.js CNAME ns-quiz/index.html ns-quiz/thanks.html ns-quiz/js/quiz.js; do
             test -s "public/$f" || { echo "missing public/$f"; exit 1; }
           done
-          grep -qx 'novasystem.orbita-ix.com' public/CNAME
+          grep -qx 'nova-system.in.ua' public/CNAME
 
       - name: У коді сайту немає токена бота і PHP
         run: |
