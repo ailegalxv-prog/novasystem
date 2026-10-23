@@ -1,0 +1,60 @@
+# Статичний сайт NovaSystem: збірки немає, публікується папка public/.
+# Перехідник заявок (relay/) живе в Google Cloud Run і тут не публікується.
+# Документація: https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages
+
+name: Deploy NovaSystem to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Обовʼязкові файли на місці
+        run: |
+          for f in index.html style.css script.js CNAME ns-quiz/index.html ns-quiz/thanks.html ns-quiz/js/quiz.js; do
+            test -s "public/$f" || { echo "missing public/$f"; exit 1; }
+          done
+          grep -qx 'novasystem.orbita-ix.com' public/CNAME
+
+      - name: У коді сайту немає токена бота і PHP
+        run: |
+          if grep -rEq '[0-9]{8,10}:[A-Za-z0-9_-]{35}' public; then echo "bot token found in public/"; exit 1; fi
+          if find public -name '*.php' | grep -q .; then echo "php file in public/"; exit 1; fi
+
+  deploy:
+    needs: check
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

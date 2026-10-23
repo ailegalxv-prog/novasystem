@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Дякуємо! Заявку отримано — NS</title>
+  <meta name="theme-color" content="#1e51db">
+  <link rel="icon" href="assets/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Google Tag Manager: вставте сюди код контейнера -->
+  <!-- Meta Pixel: вставте сюди базовий код пікселя (подія Lead надсилається нижче автоматично) -->
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap topbar__in">
+    <a class="logo" href="./" aria-label="NS — монтаж інженерних систем"><img src="assets/logo.png" alt="NS" width="104" height="48"></a>
+    <div class="topbar__contacts">
+      <a class="topbar__phone" href="tel:+380753649511">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1l-2.3 2.2z"/></svg>
+        +38 (075) 364-95-11
+      </a>
+      <span class="topbar__hours">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/></svg>
+        Пн–Пт: 9:00–19:00
+      </span>
+    </div>
+  </div>
+</header>
+
+<main class="stage">
+  <div class="stage__bg" aria-hidden="true"></div>
+
+  <section class="thanks">
+    <div class="thanks__icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+    </div>
+    <h1 data-thanks-title>Дякуємо! Заявку отримано</h1>
+    <p class="thanks__lead" data-thanks-lead>Інженер уже отримав ваші відповіді і готує прорахунок вартості системи.</p>
+
+    <div class="thanks__perk" data-perk hidden><span aria-hidden="true">🎁</span><span>Ваша знижка на монтаж: <b data-perk-value>5</b>%</span></div>
+
+    <ol class="thanks__steps">
+      <li>Інженер прорахує систему за вашими відповідями</li>
+      <li data-step-contact>Зв'яжемося з вами в робочий час: пн–пт, 9:00–19:00</li>
+      <li>За потреби домовимося про виїзд на об'єкт і замір</li>
+    </ol>
+
+    <p class="thanks__call">Не хочете чекати? Зателефонуйте нам:</p>
+    <a class="btn btn--primary btn--xl" href="tel:+380753649511">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1l-2.3 2.2z"/></svg>
+      +38 (075) 364-95-11
+    </a>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">© NS — монтаж інженерних систем у Львівській області</div>
+</footer>
+
+<script>
+  (function () {
+    var lead = null;
+    try { lead = JSON.parse(sessionStorage.getItem('ns_lead') || 'null'); } catch (e) { /* ignore */ }
+    if (!lead) return;
+
+    var esc = function (s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; };
+    if (lead.name) {
+      document.querySelector('[data-thanks-title]').innerHTML = 'Дякуємо, ' + esc(lead.name) + '!<br>Заявку отримано';
+    }
+    if (lead.discount) {
+      document.querySelector('[data-perk-value]').textContent = lead.discount;
+      document.querySelector('[data-perk]').hidden = false;
+    }
+    if (lead.channel && lead.channel !== 'Дзвінок') {
+      document.querySelector('[data-step-contact]').textContent = 'Надішлемо прорахунок у ' + lead.channel + ' в робочий час: пн–пт, 9:00–19:00';
+    }
+
+    // Конверсія — лише один раз (перезавантаження сторінки не дублює подію)
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event: 'quiz_lead', lead_discount: lead.discount || 0, lead_channel: lead.channel || '' });
+    if (typeof window.fbq === 'function') window.fbq('track', 'Lead');
+    try { sessionStorage.removeItem('ns_lead'); sessionStorage.setItem('ns_lead_shown', lead.name || '1'); } catch (e) { /* ignore */ }
+  })();
+</script>
+</body>
+</html>
