@@ -530,7 +530,7 @@ $$('.lead-form').forEach(form => {
       location.hash = '#/thanks';
     } catch (err) {
       console.error(err);
-      showToast('Помилка відправки. Зателефонуйте нам: +38 (075) 364-95-11', true);
+      showToast('Помилка відправки. Зателефонуйте нам: +38 (067) 448-81-78', true);
     } finally { btn.disabled = false; btn.textContent = old; }
   });
 });
